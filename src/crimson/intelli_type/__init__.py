@@ -1,0 +1,1 @@
+from .intelliType import IntelliType
