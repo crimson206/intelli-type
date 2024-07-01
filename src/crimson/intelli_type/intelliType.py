@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Type, Tuple, Union
 from pydantic import create_model, BaseModel, ConfigDict
 
 
@@ -8,8 +8,15 @@ class IntelliType:
     """
 
     _BaseModel: BaseModel = None
+    # For dynamic validation implemented in the future
+    meta: Any = None
 
-    def __class_getitem__(cls, annotation: Dict[str, str]) -> Dict[str, str]:
+    def __class_getitem__(cls, args:Union[Type,Tuple[Type, ...]])->Type:
+        if type(args) is tuple:
+            annotation = args[0]
+            cls.meta = args[1:]
+        else:
+            annotation = args
         _annotation = cls.get_annotation()
         if annotation == _annotation:
             return annotation
