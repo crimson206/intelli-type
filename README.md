@@ -1,58 +1,69 @@
-## Python Package Setup
+# IntelliType
 
-### Setup Base
+IntelliType is a Python library that provides enhanced type annotations with custom structure and validation capabilities. It combines the power of static type hinting with runtime type checking and validation, while ensuring full intellisense support.
 
-To install required pip modules for `generate_toml.py`, run
-``` bash
-source scripts/setup_base.sh
+## Features
+
+- Enhanced type annotations with full intellisense support
+- Runtime type checking and validation
+- Integration with Pydantic for robust data validation
+- Support for custom metadata in type definitions
+
+## Installation
+
+You can install IntelliType using pip:
+
+```
+pip install crimson-intelli-type
 ```
 
-### User Setup
+## Quick Start
 
-- go to `generate_toml.py` file, and complete the setup in the `User Setup` session.
+Here's a simple example of how to use IntelliType:
 
 ```python
-options = Options(
-    # Will you use the discussion session in your repo?
-    discussion=False
-)
+from typing import List, Generic, TypeVar
+from crimson.intelli_type import IntelliType
 
-# Define the general information of your package
-kwargs = Kwargs(
-    name_space="None",
-    module_name="None",
-    description="None",
-)
+T = TypeVar('T')
+
+class IntList(IntelliType, List[int], Generic[T]):
+    pass
+
+# This will pass and provide full intellisense support
+valid_list: IntList[List[int]] = IntList.type_safe([1, 2, 3])
+
+# This will raise a validation error
+invalid_list: IntList[List[int]] = IntList.type_safe(["a", "b", "c"])
 ```
 
-If you wrote all the information, run
-```
-python generate_toml.py
-```
+## Advanced Usage
 
-#### Template
+IntelliType supports adding custom metadata to your type definitions:
 
-If you want to understand the generation process, check the `template` variable in `generate_toml.py`.
+```python
+class CustomType(IntelliType, List[int], Generic[T]):
+    pass
 
-### Setup Env
-
-#### Prerequisite
-
-Finish [User Setup](#user-setup) first.
-Of course, conda command must be available.
-
-#### Setup Env
-
-Run
-``` bash
-source scripts/setup_env.sh
+CustomType[List[int], "This is custom metadata"]
 ```
 
-steps
-- create an conda environment named as your $MODULE_NAME
-- activate the environment.
-- install requirements.txt
+## Why use Generic[T]?
 
-## Workflows
+Including `Generic[T]` in your IntelliType class definition is crucial for proper intellisense support. It allows your IDE to provide accurate type hints and autocompletion, enhancing your development experience and catching potential type errors early.
 
-Not documented yet.
+## Documentation
+
+Not valid yet.
+
+## Contributing
+
+Not valid yet.
+
+## License
+
+IntelliType is released under the MIT License. See the [LICENSE](https://github.com/crimson206/intelli-type/blob/main/LICENSE) file for more details.
+
+## Contact
+
+If you have any questions or feedback, please open an issue on our [GitHub repository](https://github.com/crimson206/intelli-type/issues).
