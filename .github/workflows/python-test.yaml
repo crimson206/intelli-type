@@ -34,5 +34,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run tests with coverage
       run: |
-        pytest --cov=src/crimson/{module_name} --cov-report=html
+        pytest --cov=src/crimson/intelli_type --cov-report=html
 
