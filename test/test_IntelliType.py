@@ -1,8 +1,7 @@
 import pytest
-from typing import List, Dict, TypeVar, Generic
+from typing import List, Dict, TypeVar, Generic, Union, Tuple
 from pydantic import BaseModel
-
-from crimson.intelli_type import IntelliType
+from crimson.intelli_type import IntelliType, as_union
 
 T = TypeVar("T")
 
@@ -13,6 +12,12 @@ class TestIntelliType:
             pass
 
         assert MyType[List[int]] == List[int]
+
+    def test_class_getitem_with_union(self):
+        class MyType(IntelliType, Tuple[as_union, int, str], Generic[T]):
+            pass
+
+        assert MyType[Union[int, str]] == Union[int, str]
 
     def test_class_getitem_complex(self):
         class NonGeneralType:

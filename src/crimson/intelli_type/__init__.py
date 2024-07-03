@@ -1,1 +1,1 @@
-from .intelliType import IntelliType
+from .intelliType import IntelliType, as_union
