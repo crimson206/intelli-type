@@ -1,3 +1,5 @@
+# https://github.com/vvvb-github/AVSegFormer/blob/master/model/utils/fusion_block.py
+
 import torch
 import torch.nn as nn
 
