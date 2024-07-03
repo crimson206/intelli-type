@@ -3,26 +3,9 @@ from types import GenericAlias
 from pydantic import BaseModel
 
 from ._util import _create_base_model
-from ._handle_union import (  # noqa : F401
-    handle_as_union,
-)
-
+from ._replace_union import reconstruct_type
 
 T = TypeVar("T")
-
-
-class as_union:  # noqa : F811
-    """
-    define an IntelliType with Union with this dummy class.
-
-    ex)
-        class MyIntelliType(Intellitype, Tuple[as_union, int, str])
-
-    As annotation, you can use Union.
-
-    ex)
-        def my_function(arg: MyIntelliType[Union[int, str]])
-    """
 
 
 class IntelliType:
@@ -66,17 +49,30 @@ class IntelliType:
             annotation = annotation
 
         cls_annotation = cls.get_annotation()
-        if annotation == cls_annotation:
+
+        if str(cls.__orig_bases__[1]).find("as_union") != -1:
+            annoation_for_typecheck = reconstruct_type(annotation)
+        else:
+            annoation_for_typecheck = annotation
+
+        if annoation_for_typecheck == cls_annotation:
             return annotation
         else:
-            raise TypeError(f"Expected {cls_annotation}, got {annotation}")
+            raise TypeError(f"Expected {cls_annotation}, got {annoation_for_typecheck}")
 
     @classmethod
     def get_annotation(cls) -> Union[Type, GenericAlias]:
         if cls._annotation is None:
-            cls._annotation = handle_as_union(cls.__orig_bases__[1])
-
+            cls.create_annotation()
         return cls._annotation
+
+    @classmethod
+    def create_annotation(cls):
+        annotation = cls.__orig_bases__[1]
+        if str(annotation).find("as_union") != -1:
+            cls._annotation = reconstruct_type(annotation)
+        else:
+            cls._annotation = annotation
 
     # I am not sure if we need them. They can be deprecated.
 

@@ -14,10 +14,16 @@ class TestIntelliType:
         assert MyType[List[int]] == List[int]
 
     def test_class_getitem_with_union(self):
-        class MyType(IntelliType, Tuple[as_union, int, str], Generic[T]):
+        class MyType(IntelliType, Tuple[as_union, List[int], str], Generic[T]):
             pass
 
-        assert MyType[Union[int, str]] == Union[int, str]
+        assert MyType[Union[List[int], str]] == Union[List[int], str]
+
+    def test_class_getitem_with_deep_annotation(self):
+        class MyType(IntelliType, Tuple[as_union, Tuple[as_union, int, Dict[int, str]]], Generic[T]):
+            pass
+
+        assert MyType[Union[Union[int, Dict[int, str]]]] == Union[Union[int, Dict[int, str]]]
 
     def test_class_getitem_complex(self):
         class NonGeneralType:

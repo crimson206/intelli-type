@@ -1,6 +1,7 @@
 import ast
 from typing import Union  # noqa : F401
-import crimson
+
+# It is to replace union as well. However, it is tricky to get the script env.
 
 
 class TypeAnnotationTransformer(ast.NodeTransformer):
@@ -52,7 +53,7 @@ def handle_as_union(annotation):
         annotation_str_with_union = _transform_type_annotations(annotation_str)
         annotation_str_with_union = "annotation = " + annotation_str_with_union
         local_scope = {}
-        exec(annotation_str_with_union, globals(), local_scope)
+        exec(annotation_str_with_union, local_scope)
         annotation = local_scope["annotation"]
 
     return annotation

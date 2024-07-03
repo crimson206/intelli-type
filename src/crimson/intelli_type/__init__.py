@@ -1,1 +1,2 @@
-from .intelliType import IntelliType, as_union
+from .intelliType import IntelliType
+from ._replace_union import as_union
