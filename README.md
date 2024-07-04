@@ -54,12 +54,25 @@ Including `Generic[T]` in your IntelliType class definition is crucial for prope
 
 ## Examples
 
-[AutoPydantic](https://github.com/crimson206/auto-pydantic)
+### AutoPydantic
+
+I used IntelliType to add type hints to [AutoPydantic](https://github.com/crimson206/auto-pydantic). The custom types are imported from another script. In the current script, you can easily access the type information by hovering over the variables.
+
+![alt](static/auto_pydantic_like_ts.png)
+
+![alt](static/auto_pydantic_importing.png)
 
 
+### DeepLearning
 
-    
-[DeepLearning Documentation](https://github.com/crimson206/intelli-type/tree/main/example)
+Please check out the example in the link below. When using IntelliType, we don't write docstrings for attributes in the function documentation. Instead, arguments are individually documented, and their docstrings are reused throughout the code. This allows you to focus the function's documentation solely on describing its purpose and behavior.
 
+[DeepLearning Example](https://github.com/crimson206/intelli-type/tree/main/example)
 
-<img src='./static/avsegformer_example.png' alt=Alt text width=800 height=500>
+![alt](static/avsegformer_example.png)
+
+## Reusability
+
+One of the biggest advantages of IntelliType is its reusability. Many arguments are often used across different functions. Traditionally, you would need to write the docstring for these arguments repeatedly.
+
+The worst-case scenario is when you've written docstrings in multiple places and can't remember where they all are. When you modify one of your arguments, you'd need to edit all the related docstrings. However, with IntelliType, the information for your arguments is used consistently, allowing you to manage your package more cleanly and reliably.
