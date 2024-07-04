@@ -52,18 +52,14 @@ CustomType[List[int], "This is custom metadata"]
 
 Including `Generic[T]` in your IntelliType class definition is crucial for proper intellisense support. It allows your IDE to provide accurate type hints and autocompletion, enhancing your development experience and catching potential type errors early.
 
-## Documentation
+## Examples
 
-Not valid yet.
+[AutoPydantic](https://github.com/crimson206/auto-pydantic)
 
-## Contributing
 
-Not valid yet.
 
-## License
+    
+[DeepLearning Documentation](https://github.com/crimson206/intelli-type/tree/main/example)
 
-IntelliType is released under the MIT License. See the [LICENSE](https://github.com/crimson206/intelli-type/blob/main/LICENSE) file for more details.
 
-## Contact
-
-If you have any questions or feedback, please open an issue on our [GitHub repository](https://github.com/crimson206/intelli-type/issues).
+<img src='./static/avsegformer_example.png' alt=Alt text width=800 height=500>
