@@ -70,6 +70,9 @@ class IntelliType:
     def create_annotation(cls):
         annotation = cls.__orig_bases__[1]
         if str(annotation).find("as_union") != -1:
+            # Since we use _annotation field for tricky classes, we don't need it anymore.
+            # For other modules using as_union, we keep it for a while.
+            # We need the dependency-manager.
             cls._annotation = reconstruct_type(annotation)
         else:
             cls._annotation = annotation

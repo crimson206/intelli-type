@@ -1,5 +1,19 @@
-from typing import get_origin, get_args, Union, _UnionGenericAlias
+from typing import (
+    get_origin,
+    get_args,
+    Union,
+    Type,
+    Any,
+    _UnionGenericAlias,
+    TypeVar,
+)
 from types import GenericAlias
+
+# The problem that forced this implementation is simply solved by using the _annotation field instead.
+# It is planned to be deprecated.
+
+
+T = TypeVar("T")
 
 
 class as_union:
@@ -18,7 +32,9 @@ class as_union:
     """
 
 
-def replace_tuple(annotation):
+def replace_tuple(
+    annotation: Union[Type, GenericAlias, Any]
+) -> Union[Type, GenericAlias, Any]:
     origin, args = get_origin(annotation), get_args(annotation)
     if len(args) != 0:
         if str(args[0]).find("as_union") != -1:
@@ -28,7 +44,7 @@ def replace_tuple(annotation):
     return annotation
 
 
-def check_as_union(annotation):
+def check_as_union(annotation: Union[Type, GenericAlias, Any]) -> bool:
     origin = get_origin(annotation)
     args = get_args(annotation)
     if len(args) > 1:
@@ -37,7 +53,9 @@ def check_as_union(annotation):
     return False
 
 
-def replace_tuple_multi(annotation):
+def replace_tuple_multi(
+    annotation: Union[Type, GenericAlias, Any]
+) -> Union[Type, GenericAlias, Any]:
     for _ in range(5):
         if check_as_union(annotation):
             annotation = replace_tuple(annotation)
@@ -61,13 +79,13 @@ class TypeNode:
         else:
             self.type = type_annotation
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if not self.args:
             return str(self.type)
         return f"{self.type}{self.args}"
 
 
-def _reconstruct_type(node):
+def _reconstruct_type(node: TypeNode) -> Union[Type, GenericAlias, Any]:
     if not node.args:
         return node.type
 
@@ -75,7 +93,9 @@ def _reconstruct_type(node):
     return node.type[args]
 
 
-def reconstruct_type(annotation):
+def reconstruct_type(
+    annotation: Union[Type, GenericAlias, Any]
+) -> Union[Type, GenericAlias, Any]:
     type_node = TypeNode(annotation)
     annotation = _reconstruct_type(type_node)
     return annotation
