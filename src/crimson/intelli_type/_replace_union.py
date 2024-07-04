@@ -9,6 +9,9 @@ from typing import (
 )
 from types import GenericAlias
 
+# The problem that forced this implementation is simply solved by using the _annotation field instead.
+# It is planned to be deprecated.
+
 
 T = TypeVar("T")
 
