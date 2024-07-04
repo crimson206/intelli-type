@@ -52,18 +52,27 @@ CustomType[List[int], "This is custom metadata"]
 
 Including `Generic[T]` in your IntelliType class definition is crucial for proper intellisense support. It allows your IDE to provide accurate type hints and autocompletion, enhancing your development experience and catching potential type errors early.
 
-## Documentation
+## Examples
 
-Not valid yet.
+### AutoPydantic
 
-## Contributing
+I used IntelliType to add type hints to [AutoPydantic](https://github.com/crimson206/auto-pydantic). The custom types are imported from another script. In the current script, you can easily access the type information by hovering over the variables.
 
-Not valid yet.
+![alt](static/auto_pydantic_like_ts.png)
 
-## License
+![alt](static/auto_pydantic_importing.png)
 
-IntelliType is released under the MIT License. See the [LICENSE](https://github.com/crimson206/intelli-type/blob/main/LICENSE) file for more details.
 
-## Contact
+### DeepLearning
 
-If you have any questions or feedback, please open an issue on our [GitHub repository](https://github.com/crimson206/intelli-type/issues).
+Please check out the example in the link below. When using IntelliType, we don't write docstrings for attributes in the function documentation. Instead, arguments are individually documented, and their docstrings are reused throughout the code. This allows you to focus the function's documentation solely on describing its purpose and behavior.
+
+[DeepLearning Example](https://github.com/crimson206/intelli-type/tree/main/example)
+
+![alt](static/avsegformer_example.png)
+
+## Reusability
+
+One of the biggest advantages of IntelliType is its reusability. Many arguments are often used across different functions. Traditionally, you would need to write the docstring for these arguments repeatedly.
+
+The worst-case scenario is when you've written docstrings in multiple places and can't remember where they all are. When you modify one of your arguments, you'd need to edit all the related docstrings. However, with IntelliType, the information for your arguments is used consistently, allowing you to manage your package more cleanly and reliably.
