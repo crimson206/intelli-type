@@ -1,18 +1,17 @@
-from typing import Any, Type, Tuple, Union, TypeVar, ClassVar, Generic
+from typing import Any, Type, Tuple, Union, TypeVar
 from types import GenericAlias
 from pydantic import BaseModel
-
 from ._util import _create_base_model
 
 T = TypeVar("T")
 
 
-class IntelliType():
+class IntelliType:
     """
     A base class for creating enhanced type annotations with custom structure and validation.
 
     ex)
-        class MyIntelliType(IntelliType, List[int, str], Generic[T]):
+        class MyIntelliType(IntelliType[List[int, str]], Generic[T]):
             '''
             Description for the type.
             '''
@@ -23,52 +22,42 @@ class IntelliType():
         - If you hover on MyIntelliType, you can read the description.
     """
 
-    _BaseModel: ClassVar[Type[BaseModel]] = None
+    _BaseModel: Type[BaseModel] = None
     # For dynamic validation implemented in the future
-    _meta: ClassVar[Any] = None
+    _meta: Tuple[Any] = None
 
     _annotation: Union[Type[T], Tuple[Type[T], ...]] = None
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls._annotation = cls._annotation_tmp
+        cls._meta = cls._meta_tmp
+        print(f"A new subclass of ParentClass has been created: {cls.__name__}")
 
     def __class_getitem__(
         cls, annotation: Union[Type[T], Tuple[Type[T], ...]]
     ) -> Type[T]:
-        """
-        It allows IntelliType to mimic the enclosed type.
 
-        ex1) MyIntelliType[List[int, str]] returns List[int, str] by this function.
+        annotation, meta = _handle_meta(annotation)
 
-        ex2) MyIntelliType[List[int, str], 'Any Meta']
-            You can use it with additional metadata. Only the first component is the annotation, and the rest components are metadata.
-            Currently, it doesn't have additional features.
-        """
-        if type(annotation) is tuple:
-            cls._meta = annotation[1:]
-            annotation = annotation[0]
+        if cls.__name__ == "IntelliType":
+            cls._annotation_tmp = annotation
+            cls._meta_tmp = meta
+            return IntelliType
         else:
-            annotation = annotation
-
-        cls_annotation = cls.get_annotation()
-
-        annoation_for_typecheck = annotation
-
-        if annoation_for_typecheck == cls_annotation:
-            return annotation
-        else:
-            raise TypeError(f"Expected {cls_annotation}, got {annoation_for_typecheck}")
+            cls._meta = meta
+            if cls._annotation != annotation:
+                raise TypeError(f"Type mismatch: expected {cls._annotation}, but got {annotation}")
+            else:
+                return annotation
 
     @classmethod
     def get_annotation(cls) -> Union[Type, GenericAlias]:
-        if cls._annotation is None:
-            cls.create_annoataion()
         return cls._annotation
 
     @classmethod
-    def create_annoataion(cls) -> Union[Type, GenericAlias]:
-        if str(cls.__orig_bases__[1]) == str(Generic[T]):
-            cls._annotation = cls.__orig_bases__[2]
-        else:
-            cls._annotation = cls.__orig_bases__[1]
-        return cls._annotation
+    def get_meta(cls) -> Tuple[Any]:
+        return cls._meta
 
     # I am not sure if we need them. They can be deprecated.
 
@@ -87,3 +76,17 @@ class IntelliType():
             cls._BaseModel = _create_base_model(annotation, cls.__name__)
 
         return cls._BaseModel
+
+
+AnyType = TypeVar("AnyType")
+
+
+def _handle_meta(data: Union[Tuple, AnyType]) -> Tuple[AnyType, Any]:
+    if type(data) is tuple:
+        annotation = data[0]
+        meta = data[1:]
+    else:
+        annotation = data
+        meta = None
+
+    return annotation, meta
