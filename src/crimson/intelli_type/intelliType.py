@@ -1,4 +1,4 @@
-from typing import Any, Type, Tuple, Union, TypeVar, ClassVar
+from typing import Any, Type, Tuple, Union, TypeVar, ClassVar, Generic
 from types import GenericAlias
 from pydantic import BaseModel
 
@@ -15,7 +15,7 @@ class _IntelliTypeMeta(type):
                 attrs["_annotation"] = annotation
                 bases = tuple(base for base in bases if base != annotation)
         elif len(bases) != 0:
-            if str(attrs["__orig_bases__"][1]) == "typing.Generic[~T]":
+            if str(attrs["__orig_bases__"][1]) is Generic[T]:
                 index = 2
             else:
                 index = 1
