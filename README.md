@@ -64,7 +64,11 @@ Including `Generic[T]` in your IntelliType class definition is crucial for prope
 
 ### AutoPydantic
 
+
+
 I used IntelliType to add type hints to [AutoPydantic](https://github.com/crimson206/auto-pydantic). The custom types are imported from another script. In the current script, you can easily access the type information by hovering over the variables.
+
+**^0.1.x version syntax**
 
 ![alt](static/auto_pydantic_like_ts.png)
 
@@ -77,7 +81,7 @@ Please check out the example in the link below. When using IntelliType, we don't
 
 [DeepLearning Example](https://github.com/crimson206/intelli-type/tree/main/example)
 
-![alt](static/avsegformer_example.png)
+![alt](static/avsegformer_example.gif)
 
 ## Reusability
 

@@ -1,9 +1,15 @@
 import torch
 import torch.nn as nn
-from torch import Tensor
+
+# from torch import Tensor
 from typing import Tuple
 from crimson.intelli_type import IntelliType
 from typing import TypeVar, Generic
+
+
+class Tensor:
+    pass
+
 
 T = TypeVar("T")
 
