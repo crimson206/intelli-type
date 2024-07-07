@@ -13,9 +13,15 @@ class TestIntelliType:
 
         assert MyType[List[int]] == List[int]
 
-    def test_class_getitem_detour_official(self):
-        class MyType(IntelliType, Generic[T], annotation=Union[List[int], str]):
+    def test_class_getitem_diff_position(self):
+        class MyType(IntelliType, Generic[T], List[int]):
             pass
+
+        assert MyType[List[int]] == List[int]
+
+    def test_class_getitem_detour_directly(self):
+        class MyType(IntelliType, Generic[T]):
+            _annotation = Union[List[int], str]
 
         assert MyType[Union[List[int], str]] == Union[List[int], str]
 
@@ -25,13 +31,15 @@ class TestIntelliType:
                 pass
 
     def test_class_getitem_deep_union_with_kwarg(self):
-        class MyType(IntelliType, Generic[T], annotation=Union[Union[int, Dict[int, str]]]):
+        class MyType(IntelliType, Generic[T]):
+            _annotation = Union[Union[int, Dict[int, str]]]
             pass
 
         assert MyType[Union[Union[int, Dict[int, str]]]] == Union[Union[int, Dict[int, str]]]
 
     def test_class_getitem_with_bool(self):
-        class MyType(IntelliType, Generic[T], annotation=Union[str, bool]):
+        class MyType(IntelliType, Generic[T]):
+            _annotation = Union[str, bool]
             pass
 
         assert MyType[Union[str, bool]] == Union[str, bool]
