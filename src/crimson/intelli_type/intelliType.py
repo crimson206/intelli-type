@@ -64,7 +64,7 @@ class IntelliType():
 
     @classmethod
     def create_annoataion(cls) -> Union[Type, GenericAlias]:
-        if cls.__orig_bases__[1] is Generic[T]:
+        if str(cls.__orig_bases__[1]) == str(Generic[T]):
             cls._annotation = cls.__orig_bases__[2]
         else:
             cls._annotation = cls.__orig_bases__[1]

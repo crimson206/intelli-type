@@ -13,7 +13,13 @@ class TestIntelliType:
 
         assert MyType[List[int]] == List[int]
 
-    def test_class_getitem_detour_official(self):
+    def test_class_getitem_diff_position(self):
+        class MyType(IntelliType, Generic[T], List[int]):
+            pass
+
+        assert MyType[List[int]] == List[int]
+
+    def test_class_getitem_detour_directly(self):
         class MyType(IntelliType, Generic[T]):
             _annotation = Union[List[int], str]
 
