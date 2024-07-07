@@ -7,31 +7,7 @@ from ._util import _create_base_model
 T = TypeVar("T")
 
 
-class _IntelliTypeMeta(type):
-    def __new__(cls, name, bases, attrs, **kwargs):
-        if "annotation" in kwargs.keys():
-            annotation = kwargs.pop("annotation", None)
-            if annotation:
-                attrs["_annotation"] = annotation
-                bases = tuple(base for base in bases if base != annotation)
-        elif len(bases) != 0:
-            if str(attrs["__orig_bases__"][1]) is Generic[T]:
-                index = 2
-            else:
-                index = 1
-
-            attrs["_annotation"] = attrs["__orig_bases__"][index]
-            attrs["__orig_bases__"] = _tuple_remove(attrs["__orig_bases__"], index)
-        return super().__new__(cls, name, bases, attrs, **kwargs)
-
-
-def _tuple_remove(data: tuple, index: int) -> tuple:
-    data = list(data)
-    data = data[:index] + data[(index + 1) :]
-    return tuple(data)
-
-
-class IntelliType(metaclass=_IntelliTypeMeta):
+class IntelliType():
     """
     A base class for creating enhanced type annotations with custom structure and validation.
 
@@ -82,6 +58,16 @@ class IntelliType(metaclass=_IntelliTypeMeta):
 
     @classmethod
     def get_annotation(cls) -> Union[Type, GenericAlias]:
+        if cls._annotation is None:
+            cls.create_annoataion()
+        return cls._annotation
+
+    @classmethod
+    def create_annoataion(cls) -> Union[Type, GenericAlias]:
+        if cls.__orig_bases__[1] is Generic[T]:
+            cls._annotation = cls.__orig_bases__[2]
+        else:
+            cls._annotation = cls.__orig_bases__[1]
         return cls._annotation
 
     # I am not sure if we need them. They can be deprecated.
