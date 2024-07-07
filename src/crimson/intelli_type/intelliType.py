@@ -21,8 +21,14 @@ class _IntelliTypeMeta(type):
                 index = 1
 
             attrs["_annotation"] = attrs["__orig_bases__"][index]
-            attrs["__orig_bases__"] = tuple(list(attrs["__orig_bases__"]).pop(index))
+            attrs["__orig_bases__"] = _tuple_remove(attrs["__orig_bases__"], index)
         return super().__new__(cls, name, bases, attrs, **kwargs)
+
+
+def _tuple_remove(data: tuple, index: int) -> tuple:
+    data = list(data)
+    data = data[:index] + data[(index + 1) :]
+    return tuple(data)
 
 
 class IntelliType(metaclass=_IntelliTypeMeta):
