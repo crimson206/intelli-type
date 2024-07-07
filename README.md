@@ -29,31 +29,40 @@ from crimson.intelli_type import IntelliType
 T = TypeVar('T')
 
 class IntList(IntelliType[List[int]], Generic[T]):
-    """A list that only contains integers."""
+    """Define your own type with hover capability."""
 
-# This will pass and provide full intellisense support
+# You can use type_safe for validation if needed
 valid_list: IntList[List[int]] = IntList.type_safe([1, 2, 3])
 
-# This will raise a validation error
+# This will raise an error due to incorrect data type
 invalid_list: IntList[List[int]] = IntList.type_safe(["a", "b", "c"])
 ```
 
 ### Adding Custom Metadata
 
-IntelliType supports adding custom metadata to your type definitions:
+IntelliType supports adding custom metadata. Use it in your own way.
 
 ```python
-class CustomType(IntelliType[List[int]], Generic[T]):
-    """A list of integers with custom metadata."""
+class CustomTensor(IntelliType[Tuple[Tensor, Tensor], 'metadata'], Generic[T]):
+    """A custom tensor type with metadata."""
 
-# Usage with metadata
-my_var: CustomType[List[int], "This is custom metadata"] = [1, 2, 3]
+print(CustomTensor.get_meta())  # Output: ('metadata',)
 
-# Accessing metadata
-print(CustomType.get_meta())  # Output: ('This is custom metadata',)
+def forward(input_tensor: CustomTensor[Tuple[Tensor, Tensor], "(b, c, h, w), (b, 2c, h/2, w/2)"]):
+    print(CustomTensor.get_meta())  # Output: ('(b, c, h, w), (b, 2c, h/2, w/2)',)
+    ...
+
+# You can also use metadata in more complex scenarios
+class Model(nn.Module):
+    pass
+
+class AdvancedModel(IntelliType[nn.Module], Generic[T]):
+    """General information."""
+
+model: AdvancedModel[nn.Module, 'specific information', Model] = Model()
+
+print(AdvancedModel.get_meta())  # Output: ('specific information', __main__.Model)
 ```
-
-A further usage of metadata is planned. Coming soon...
 
 
 ## Why use Generic[T]?

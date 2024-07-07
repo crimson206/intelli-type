@@ -32,7 +32,6 @@ class IntelliType:
         super().__init_subclass__(**kwargs)
         cls._annotation = cls._annotation_tmp
         cls._meta = cls._meta_tmp
-        print(f"A new subclass of ParentClass has been created: {cls.__name__}")
 
     def __class_getitem__(
         cls, annotation: Union[Type[T], Tuple[Type[T], ...]]
