@@ -1,7 +1,7 @@
 import pytest
 from typing import List, Dict, TypeVar, Generic, Union, Tuple
 from pydantic import BaseModel
-from crimson.intelli_type import IntelliType, as_union
+from crimson.intelli_type import IntelliType
 
 T = TypeVar("T")
 
@@ -13,17 +13,28 @@ class TestIntelliType:
 
         assert MyType[List[int]] == List[int]
 
-    def test_class_getitem_with_union(self):
-        class MyType(IntelliType, Tuple[as_union, List[int], str], Generic[T]):
+    def test_class_getitem_detour_official(self):
+        class MyType(IntelliType, Generic[T], annotation=Union[List[int], str]):
             pass
 
         assert MyType[Union[List[int], str]] == Union[List[int], str]
 
-    def test_class_getitem_with_deep_annotation(self):
-        class MyType(IntelliType, Tuple[as_union, Tuple[as_union, int, Dict[int, str]]], Generic[T]):
+    def test_class_getitem_deep_union_raise_error(self):
+        with pytest.raises(TypeError):
+            class MyType(IntelliType, Generic[T], Union[Union[int, Dict[int, str]]]):
+                pass
+
+    def test_class_getitem_deep_union_with_kwarg(self):
+        class MyType(IntelliType, Generic[T], annotation=Union[Union[int, Dict[int, str]]]):
             pass
 
         assert MyType[Union[Union[int, Dict[int, str]]]] == Union[Union[int, Dict[int, str]]]
+
+    def test_class_getitem_with_bool(self):
+        class MyType(IntelliType, Generic[T], annotation=Union[str, bool]):
+            pass
+
+        assert MyType[Union[str, bool]] == Union[str, bool]
 
     def test_class_getitem_complex(self):
         class NonGeneralType:

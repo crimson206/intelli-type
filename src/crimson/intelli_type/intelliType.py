@@ -3,12 +3,29 @@ from types import GenericAlias
 from pydantic import BaseModel
 
 from ._util import _create_base_model
-from ._replace_union import reconstruct_type
 
 T = TypeVar("T")
 
 
-class IntelliType:
+class _IntelliTypeMeta(type):
+    def __new__(cls, name, bases, attrs, **kwargs):
+        if "annotation" in kwargs.keys():
+            annotation = kwargs.pop("annotation", None)
+            if annotation:
+                attrs["_annotation"] = annotation
+                bases = tuple(base for base in bases if base != annotation)
+        elif len(bases) != 0:
+            if str(attrs["__orig_bases__"][1]) == "typing.Generic[~T]":
+                index = 2
+            else:
+                index = 1
+
+            attrs["_annotation"] = attrs["__orig_bases__"][index]
+            attrs["__orig_bases__"] = tuple(list(attrs["__orig_bases__"]).pop(index))
+        return super().__new__(cls, name, bases, attrs, **kwargs)
+
+
+class IntelliType(metaclass=_IntelliTypeMeta):
     """
     A base class for creating enhanced type annotations with custom structure and validation.
 
@@ -50,10 +67,7 @@ class IntelliType:
 
         cls_annotation = cls.get_annotation()
 
-        if str(cls.__orig_bases__[1]).find("as_union") != -1:
-            annoation_for_typecheck = reconstruct_type(annotation)
-        else:
-            annoation_for_typecheck = annotation
+        annoation_for_typecheck = annotation
 
         if annoation_for_typecheck == cls_annotation:
             return annotation
@@ -62,20 +76,7 @@ class IntelliType:
 
     @classmethod
     def get_annotation(cls) -> Union[Type, GenericAlias]:
-        if cls._annotation is None:
-            cls.create_annotation()
         return cls._annotation
-
-    @classmethod
-    def create_annotation(cls):
-        annotation = cls.__orig_bases__[1]
-        if str(annotation).find("as_union") != -1:
-            # Since we use _annotation field for tricky classes, we don't need it anymore.
-            # For other modules using as_union, we keep it for a while.
-            # We need the dependency-manager.
-            cls._annotation = reconstruct_type(annotation)
-        else:
-            cls._annotation = annotation
 
     # I am not sure if we need them. They can be deprecated.
 
