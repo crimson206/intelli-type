@@ -61,11 +61,11 @@ IntelliType offers flexibility in how you define your custom types. Here are the
    Both of these styles work identically. The order of `Generic[T]` doesn't affect the functionality.
 
 2. Annotation Style:
-   For types that can't be used as bases (such as `Union` or `bool`), use the `annotation` parameter.
+   For types that can't be used as bases (such as `Union` or `bool`), set  `_annotation` directly.
 
    ```python
-   class CustomType(IntelliType, Generic[T], annotation=Union[str, bool]):
-       pass
+   class CustomType(IntelliType, Generic[T]):
+       _annotation = Union[str, bool]
    ```
 
    This style is safer and more flexible when dealing with complex types.
@@ -74,7 +74,7 @@ IntelliType offers flexibility in how you define your custom types. Here are the
    IntelliType supports adding custom metadata to your type definitions.
 
    ```python
-   class CustomType(IntelliType, Generic[T], annotation=List[int]):
+   class CustomType(IntelliType, List[int], Generic[T]):
        pass
 
    # Usage
