@@ -17,6 +17,7 @@ You can install IntelliType using pip:
 pip install crimson-intelli-type
 ```
 
+
 ## Quick Start
 
 Here's a simple example of how to use IntelliType:
@@ -27,8 +28,8 @@ from crimson.intelli_type import IntelliType
 
 T = TypeVar('T')
 
-class IntList(IntelliType, Generic[T], annotation = List[int]):
-    pass
+class IntList(IntelliType[List[int]], Generic[T]):
+    """A list that only contains integers."""
 
 # This will pass and provide full intellisense support
 valid_list: IntList[List[int]] = IntList.type_safe([1, 2, 3])
@@ -37,51 +38,22 @@ valid_list: IntList[List[int]] = IntList.type_safe([1, 2, 3])
 invalid_list: IntList[List[int]] = IntList.type_safe(["a", "b", "c"])
 ```
 
-## Advanced Usage
+### Adding Custom Metadata
 
-### Styles
+IntelliType supports adding custom metadata to your type definitions:
 
-IntelliType offers flexibility in how you define your custom types. Here are the common patterns:
+```python
+class CustomType(IntelliType[List[int]], Generic[T]):
+    """A list of integers with custom metadata."""
 
-1. Standard Style:
-   This is the most common way to define an IntelliType class.
+# Usage with metadata
+my_var: CustomType[List[int], "This is custom metadata"] = [1, 2, 3]
 
-   ```python
-   class CustomType(IntelliType, List[int], Generic[T]):
-       pass
-   ```
+# Accessing metadata
+print(CustomType.get_meta())  # Output: ('This is custom metadata',)
+```
 
-   or
-
-   ```python
-   class CustomType(IntelliType, Generic[T], List[int]):
-       pass
-   ```
-
-   Both of these styles work identically. The order of `Generic[T]` doesn't affect the functionality.
-
-2. Annotation Style:
-   For types that can't be used as bases (such as `Union` or `bool`), set  `_annotation` directly.
-
-   ```python
-   class CustomType(IntelliType, Generic[T]):
-       _annotation = Union[str, bool]
-   ```
-
-   This style is safer and more flexible when dealing with complex types.
-
-3. Custom Metadata Style:
-   IntelliType supports adding custom metadata to your type definitions.
-
-   ```python
-   class CustomType(IntelliType, List[int], Generic[T]):
-       pass
-
-   # Usage
-   my_var: CustomType[List[int], "This is custom metadata"] = ...
-   ```
-
-   The metadata can be accessed later if needed, providing additional information about the type.
+A further usage of metadata is planned. Coming soon...
 
 
 ## Why use Generic[T]?

@@ -16,7 +16,7 @@ Process:
 """
 
 
-class FeatureMap(IntelliType, Tensor, Generic[T]):
+class FeatureMap(IntelliType[Tensor], Generic[T]):
     """
     Represents a feature map extracted from an image.
 
@@ -32,7 +32,7 @@ class FeatureMap(IntelliType, Tensor, Generic[T]):
     """
 
 
-class AudioFeature(IntelliType, Tensor, Generic[T]):
+class AudioFeature(IntelliType[Tensor], Generic[T]):
     """
     VggishOutput representation.
 
@@ -43,7 +43,7 @@ class AudioFeature(IntelliType, Tensor, Generic[T]):
     """
 
 
-class AudioQuery(IntelliType, Tensor, Generic[T]):
+class AudioQuery(IntelliType[Tensor], Generic[T]):
     """
     Audio query for cross-modal attention.
     (Note: Distinct from the Query used in the Audio-Visual Mixer)
@@ -54,7 +54,7 @@ class AudioQuery(IntelliType, Tensor, Generic[T]):
     """
 
 
-class ImageKey(IntelliType, Tensor, Generic[T]):
+class ImageKey(IntelliType[Tensor], Generic[T]):
     """
     Image key for cross-modal attention.
 
@@ -65,7 +65,7 @@ class ImageKey(IntelliType, Tensor, Generic[T]):
     """
 
 
-class ImageValue(IntelliType, Tensor, Generic[T]):
+class ImageValue(IntelliType[Tensor], Generic[T]):
     """
     Image value for cross-modal attention.
 
@@ -76,7 +76,7 @@ class ImageValue(IntelliType, Tensor, Generic[T]):
     """
 
 
-class Attn(IntelliType, Tensor, Generic[T]):
+class Attn(IntelliType[Tensor], Generic[T]):
     """
     It filters ImageValue out where the AudioQuery and ImageKey are not related.
 
@@ -85,7 +85,7 @@ class Attn(IntelliType, Tensor, Generic[T]):
     """
 
 
-class QueriedValue(IntelliType, Tensor, Generic[T]):
+class QueriedValue(IntelliType[Tensor], Generic[T]):
     """
     The channel values play the role of filter preferring to the features more related to the AudioQuery.
 
@@ -94,7 +94,7 @@ class QueriedValue(IntelliType, Tensor, Generic[T]):
     """
 
 
-class FusionMap(IntelliType, Tensor, Generic[T]):
+class FusionMap(IntelliType[Tensor], Generic[T]):
     """
     Represents the fused feature map after applying cross-modal attention.
 
