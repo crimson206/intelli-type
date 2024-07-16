@@ -2,6 +2,9 @@
 
 IntelliType is a Python library that provides enhanced type annotations with custom structure and validation capabilities. It combines the power of static type hinting with runtime type checking and validation, while ensuring full intellisense support.
 
+## Publications
+- [IntelliType: Python Type Hinting with Hoverable Docstrings](https://dev.to/crimson206/intellitype-python-type-hinting-with-hoverable-docstrings-2bck)
+
 ## Features
 
 - Enhanced type annotations with full intellisense support
@@ -79,9 +82,9 @@ I used IntelliType to add type hints to [AutoPydantic](https://github.com/crimso
 
 **^0.1.x version syntax**
 
-![alt](static/auto_pydantic_like_ts.png)
+![alt](docs/static/auto_pydantic_like_ts.png)
 
-![alt](static/auto_pydantic_importing.png)
+![alt](docs/static/auto_pydantic_importing.png)
 
 
 ### DeepLearning
@@ -90,7 +93,7 @@ Please check out the example in the link below. When using IntelliType, we don't
 
 [DeepLearning Example](https://github.com/crimson206/intelli-type/tree/main/example)
 
-![alt](static/avsegformer_example.gif)
+![alt](docs/static/avsegformer_example.gif)
 
 ## Reusability
 

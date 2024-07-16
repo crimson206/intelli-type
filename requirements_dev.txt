@@ -1,1 +1,2 @@
 crimson-file-loader
+crimson-auto-pydantic
