@@ -8,7 +8,7 @@ In this post, we will learn how to use them alternatively.
 
 The version 0.3.x syntax has a critical problem. The return annotation of the `__class_getitem__` function is not analyzed by (at least VSCode) IDE. While our annotation works programmatically, we can't get IDE support such as Auto-Completion.
 
-Therefore, it is better to revert to the 0.1.x version syntax, which inherits the type classes directly.
+Therefore, it is better to recovered the 0.1.x version syntax, which inherits the type classes directly.
 
 ```python
 class CustomType(IntelliType, int, Generic[T]):
