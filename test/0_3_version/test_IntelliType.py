@@ -11,19 +11,19 @@ class TestIntelliType:
         class MyType(IntelliType[List[int]], Generic[T]):
             pass
 
-        assert MyType._annotation == List[int]
+        assert MyType.annotation == List[int]
 
     def test_class_definition_union(self):
         class MyType(IntelliType[Union[int, str]], Generic[T]):
             pass
 
-        assert MyType._annotation == Union[int, str]
+        assert MyType.annotation == Union[int, str]
 
     def test_class_definition_complex(self):
         class MyType(IntelliType[Dict[str, Union[int, List[str]]]], Generic[T]):
             pass
 
-        assert MyType._annotation == Dict[str, Union[int, List[str]]]
+        assert MyType.annotation == Dict[str, Union[int, List[str]]]
 
     def test_class_getitem(self):
         class MyType(IntelliType[List[int]], Generic[T]):
@@ -36,7 +36,7 @@ class TestIntelliType:
             pass
 
         MyType[List[int], r"meta_data"]
-        assert MyType._meta == (r"meta_data",)
+        assert MyType.meta == (r"meta_data",)
 
     def test_class_getitem_type_mismatch(self):
         class MyType(IntelliType[List[int]], Generic[T]):
@@ -85,7 +85,7 @@ class TestIntelliType:
         class MyType(IntelliType[Union[int, Union[str, bool]]], Generic[T]):
             pass
 
-        assert MyType._annotation == Union[int, Union[str, bool]]
+        assert MyType.annotation == Union[int, Union[str, bool]]
 
     def test_custom_type(self):
         class CustomType:
@@ -94,7 +94,7 @@ class TestIntelliType:
         class MyType(IntelliType[CustomType], Generic[T]):
             pass
 
-        assert MyType._annotation == CustomType
+        assert MyType.annotation == CustomType
 
 
 if __name__ == "__main__":
