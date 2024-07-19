@@ -1,4 +1,4 @@
-from typing import Any, Type, Tuple, Union, TypeVar, Annotated, Generic
+from typing import Any, Type, Tuple, Union, TypeVar, Generic
 from types import GenericAlias
 from pydantic import BaseModel
 from ._util import _create_base_model
